@@ -1,1 +1,13 @@
 @import "tailwindcss";
+
+@theme {
+    --color-primary: #0000EE;
+    --color-background: #f8fafc;
+}
+
+@layer base {
+    body {
+        /* @apply bg-slate-50 */
+        @apply bg-background
+    }
+}
