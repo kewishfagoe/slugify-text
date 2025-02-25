@@ -3,11 +3,13 @@ import Card from '@components/layout/Card'
 import TextField from '@components/forms/TextField/TextField'
 import RadioButton from '@components/forms/RadioButton/RadioButton'
 import Button from '@components/forms/Button/Button'
+import CheckBox from '@components/forms/CheckBox/CheckBox'
 
 const SlugifyTextForm = () => {
     const [textFieldInputValue, setTextFieldInputValue] = useState("")
     const [slugifiedTextValue, setSlugifiedTextValue] = useState("")
     const [selectedRadioButtonValue, setSelectedRadioButtonValue] = useState("dash")
+    const [removeNumbersIsChecked, setRemoveNumbersIsChecked] = useState(false)
 
     const handleTextFieldChange = (value) => {
         setTextFieldInputValue(value)
@@ -15,6 +17,10 @@ const SlugifyTextForm = () => {
 
     const handleRadioButtonChange = (event) => {
         setSelectedRadioButtonValue(event.target.value)
+    }
+
+    const handleRemoveNumbersCheckBoxClick = (value) => {
+        setRemoveNumbersIsChecked(value)
     }
 
     const handleSlugifyTextClick = () => {
@@ -25,12 +31,18 @@ const SlugifyTextForm = () => {
         if (selectedRadioButtonValue === "underscore") { separator = "_" }
 
         const words = textFieldInputValue.split(" ")
-        const processedWords = words
+        let processedWords = words
                                 .map((word) => word.trim())
                                 .map((word) => word.toLowerCase())
                                 .map((word) => word.replace(/[-_]/g, "")) // Remove hyphens and underscores
                                 .map((word) => word.replace(/[^\w\s-]/g, "")) // Remove any special characters except for letters, numbers, spaces, and hyphens
                                 .filter((element) => element) // Remove empty array elements
+
+        if (removeNumbersIsChecked) {
+            processedWords = processedWords
+                                .map(word => word.replace(/\d+/g, ''))
+                                .filter((element) => element) // Remove any empty array elements if a word consisted of just numbers
+        }
 
         const slugifiedText = processedWords.join(separator)
 
@@ -71,6 +83,13 @@ const SlugifyTextForm = () => {
                     onChange={handleRadioButtonChange}
                     id="underscoreRadioButton"
                     checked={selectedRadioButtonValue === "underscore"}
+                />
+
+                <CheckBox
+                    label="Remove Numbers"
+                    id="removeNumbersCheckbox"
+                    className="mt-4"
+                    onClick={handleRemoveNumbersCheckBoxClick}
                 />
 
                 <div className="mt-4">
