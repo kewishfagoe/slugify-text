@@ -25,16 +25,14 @@ const SlugifyTextForm = () => {
         if (selectedRadioButtonValue === "underscore") { separator = "_" }
 
         const words = textFieldInputValue.split(" ")
-
-        const slugifiedText = words
+        const processedWords = words
                                 .map((word) => word.trim())
                                 .map((word) => word.toLowerCase())
                                 .map((word) => word.replace(/[-_]/g, "")) // Remove hyphens and underscores
                                 .map((word) => word.replace(/[^\w\s-]/g, "")) // Remove any special characters except for letters, numbers, spaces, and hyphens
-                                .map((word) => word.toLowerCase())
                                 .filter((element) => element) // Remove empty array elements
-                                // .filter(function (element) { return element }) // Remove empty array elements
-                                .join(separator)
+
+        const slugifiedText = processedWords.join(separator)
 
         setSlugifiedTextValue(slugifiedText)
 
@@ -90,11 +88,12 @@ const SlugifyTextForm = () => {
                     >
                         Clear
                     </Button>
+                    {/* TODO: Add show history button here */}
                 </div>
             </Card>
             <Card heading="Output:">
                 <p className="text-lg rounded-lg p-4 bg-gray-50 min-h-15 break-all">{slugifiedTextValue}</p>
-                {/* TODO: Add copy button here */}
+                {/* TODO: Add copy to clipboard button here */}
             </Card>
 
             <p className="text-sm text-gray-500 px-8">
