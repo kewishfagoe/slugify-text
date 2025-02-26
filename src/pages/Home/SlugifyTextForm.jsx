@@ -152,11 +152,14 @@ const SlugifyTextForm = () => {
                 </div>
             </Card>
 
+            <p className="text-sm text-gray-500 px-8 mb-4">
+                <strong>Stop words:</strong>  <br />
+                Common words that are removed from text during processing because they have little meaning on their own.
+            </p>
             <p className="text-sm text-gray-500 px-8">
-                Example sentence to try: <br />
+                <strong>Example sentence to try:</strong> <br />
                 Hello __Aliens. I STILL believe@ in coMBining #tech and art &#32;&#32;&#32;&#32;&#32;     in 2077. I need - $57B please!
             </p>
-            <code className="text-sm text-gray-500 px-8"></code>
         </>
     )
 }
