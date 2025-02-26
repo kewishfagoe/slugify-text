@@ -54,6 +54,7 @@ const SlugifyTextForm = () => {
         const slugifiedText = processedWords.join(separator)
 
         setSlugifiedTextValue(slugifiedText)
+        setCopyMessage("")
 
         // TODO: store input and output value in localstorage with date
     }
