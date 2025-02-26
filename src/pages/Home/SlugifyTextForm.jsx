@@ -5,12 +5,14 @@ import RadioButton from '@components/forms/RadioButton/RadioButton'
 import Button from '@components/forms/Button/Button'
 import CheckBox from '@components/forms/CheckBox/CheckBox'
 import { isWhitespaceString, isEmptyString } from '@utils/helpers/string.helpers'
+import { STOP_WORDS } from '@utils/constants/stopWords.constants'
 
 const SlugifyTextForm = () => {
     const [textFieldInputValue, setTextFieldInputValue] = useState("")
     const [slugifiedTextValue, setSlugifiedTextValue] = useState("")
     const [selectedRadioButtonValue, setSelectedRadioButtonValue] = useState("dash")
     const [removeNumbersIsChecked, setRemoveNumbersIsChecked] = useState(false)
+    const [removeStopWordsIsChecked, setRemoveStopWordsIsChecked] = useState(false)
     const [showErrorMessage, setShowErrorMessage] = useState(false)
     const [copyMessage, setCopyMessage] = useState("")
 
@@ -24,6 +26,10 @@ const SlugifyTextForm = () => {
 
     const handleRemoveNumbersCheckBoxClick = (value) => {
         setRemoveNumbersIsChecked(value)
+    }
+
+    const handleRemoveStopWordsCheckBoxClick = (value) => {
+        setRemoveStopWordsIsChecked(value)
     }
 
     const handleSlugifyTextClick = () => {
@@ -49,6 +55,11 @@ const SlugifyTextForm = () => {
             processedWords = processedWords
                                 .map(word => word.replace(/\d+/g, ''))
                                 .filter((element) => element) // Remove any empty array elements if a word consisted of just numbers
+        }
+
+        if (removeStopWordsIsChecked) {
+            processedWords = processedWords
+                                .filter(word => !STOP_WORDS.includes(word));
         }
 
         const slugifiedText = processedWords.join(separator)
@@ -116,6 +127,13 @@ const SlugifyTextForm = () => {
                     id="removeNumbersCheckbox"
                     className="mt-4"
                     onClick={handleRemoveNumbersCheckBoxClick}
+                />
+
+                <CheckBox
+                    label="Remove Stop Words"
+                    id="removeStopWordsCheckbox"
+                    className="mt-4"
+                    onClick={handleRemoveStopWordsCheckBoxClick}
                 />
 
                 <div className="mt-4">
