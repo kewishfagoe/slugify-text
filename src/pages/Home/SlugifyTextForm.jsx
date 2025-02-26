@@ -4,12 +4,14 @@ import TextField from '@components/forms/TextField/TextField'
 import RadioButton from '@components/forms/RadioButton/RadioButton'
 import Button from '@components/forms/Button/Button'
 import CheckBox from '@components/forms/CheckBox/CheckBox'
+import { isWhitespaceString, isEmptyString } from '@utils/helpers/string.helpers'
 
 const SlugifyTextForm = () => {
     const [textFieldInputValue, setTextFieldInputValue] = useState("")
     const [slugifiedTextValue, setSlugifiedTextValue] = useState("")
     const [selectedRadioButtonValue, setSelectedRadioButtonValue] = useState("dash")
     const [removeNumbersIsChecked, setRemoveNumbersIsChecked] = useState(false)
+    const [showErrorMessage, setShowErrorMessage] = useState(false)
 
     const handleTextFieldChange = (value) => {
         setTextFieldInputValue(value)
@@ -24,7 +26,11 @@ const SlugifyTextForm = () => {
     }
 
     const handleSlugifyTextClick = () => {
-        // TODO: check input is empty or consists of spaces, if yes, return and display error message
+        setShowErrorMessage(false)
+        if (isWhitespaceString(textFieldInputValue) || isEmptyString(textFieldInputValue)) {
+            setShowErrorMessage(true)
+            return
+        }
 
         let separator = " "
         if (selectedRadioButtonValue === "dash") { separator = "-" }
@@ -54,6 +60,7 @@ const SlugifyTextForm = () => {
     const handleClearTextFieldClick = () => {
         setTextFieldInputValue("")
         setSlugifiedTextValue("")
+        setShowErrorMessage(false)
     }
 
     return (
@@ -65,7 +72,13 @@ const SlugifyTextForm = () => {
                     placeholder="Enter text to slugify..."
                     id="slugifyTextInput"
                 />
-                {/* TODO: Add error message here */}
+                <p
+                    className={
+                        showErrorMessage ? "text-sm text-red-500 block" : "hidden"
+                    }
+                >
+                    Input text cannot be empty.
+                </p>
 
                 <p className="text-base text-gray-600 mt-4 mb-2">Separate with:</p>
                 <RadioButton
