@@ -12,6 +12,7 @@ const SlugifyTextForm = () => {
     const [selectedRadioButtonValue, setSelectedRadioButtonValue] = useState("dash")
     const [removeNumbersIsChecked, setRemoveNumbersIsChecked] = useState(false)
     const [showErrorMessage, setShowErrorMessage] = useState(false)
+    const [copyMessage, setCopyMessage] = useState("")
 
     const handleTextFieldChange = (value) => {
         setTextFieldInputValue(value)
@@ -61,6 +62,17 @@ const SlugifyTextForm = () => {
         setTextFieldInputValue("")
         setSlugifiedTextValue("")
         setShowErrorMessage(false)
+        setCopyMessage("")
+    }
+
+    const handleCopyToClipboardButtonClick = () => {
+        if (isWhitespaceString(slugifiedTextValue) || isEmptyString(slugifiedTextValue)) {
+            setCopyMessage("Nothing to copy.")
+            return
+        }
+
+        navigator.clipboard.writeText(slugifiedTextValue)
+        setCopyMessage("Copied!")
     }
 
     return (
@@ -125,11 +137,22 @@ const SlugifyTextForm = () => {
             </Card>
             <Card heading="Output:">
                 <p className="text-lg rounded-lg p-4 bg-gray-50 min-h-15 break-all">{slugifiedTextValue}</p>
-                {/* TODO: Add copy to clipboard button here */}
+                <div className="mt-4">
+                    <Button
+                        onClick={handleCopyToClipboardButtonClick}
+                        type="secondary"
+                        className="float-right"
+                    >
+                        Copy To Clipboard
+                    </Button>
+                    <p className="text-sm text-gray-600 block float-right mr-2 px-5 py-2.5" >
+                        {copyMessage}
+                    </p>
+                </div>
             </Card>
 
             <p className="text-sm text-gray-500 px-8">
-                Example sentence to test with: <br />
+                Example sentence to try: <br />
                 Hello __Aliens. I STILL believe@ in coMBining #tech and art &#32;&#32;&#32;&#32;&#32;     in 2077. I need - $57B please!
             </p>
             <code className="text-sm text-gray-500 px-8"></code>
