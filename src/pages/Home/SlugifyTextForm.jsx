@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import Card from '@components/layout/Card'
 import TextField from '@components/forms/TextField/TextField'
 import RadioButton from '@components/forms/RadioButton/RadioButton'
@@ -6,6 +6,8 @@ import Button from '@components/forms/Button/Button'
 import CheckBox from '@components/forms/CheckBox/CheckBox'
 import { isWhitespaceString, isEmptyString } from '@utils/helpers/string.helpers'
 import { STOP_WORDS } from '@utils/constants/stopWords.constants'
+import LocalStorageService from '@services/LocalStorage/LocalStorage.service'
+import { HISTORY_DATA_KEY } from '@utils/constants/localStorageKeys.constants'
 
 const SlugifyTextForm = () => {
     const [textFieldInputValue, setTextFieldInputValue] = useState("")
@@ -15,6 +17,14 @@ const SlugifyTextForm = () => {
     const [removeStopWordsIsChecked, setRemoveStopWordsIsChecked] = useState(false)
     const [showErrorMessage, setShowErrorMessage] = useState(false)
     const [copyMessage, setCopyMessage] = useState("")
+    const [historyData, setHistoryData] = useState([])
+
+    useEffect(() => {
+        const storedHistoryData = LocalStorageService.getItem(HISTORY_DATA_KEY)
+        if (storedHistoryData) {
+            setHistoryData(storedHistoryData)
+        }
+    }, []);
 
     const handleTextFieldChange = (value) => {
         setTextFieldInputValue(value)
@@ -67,7 +77,8 @@ const SlugifyTextForm = () => {
         setSlugifiedTextValue(slugifiedText)
         setCopyMessage("")
 
-        // TODO: store input and output value in localstorage with date
+        // update localStorage data
+        addNewEntryToHistoryData(slugifiedText)
     }
 
     const handleClearTextFieldClick = () => {
@@ -85,6 +96,20 @@ const SlugifyTextForm = () => {
 
         navigator.clipboard.writeText(slugifiedTextValue)
         setCopyMessage("Copied!")
+    }
+
+    const addNewEntryToHistoryData = (slugifiedText) => {
+        const newEntry = {
+            id: Date.now(), // unique ID based on timestamp
+            input: textFieldInputValue,
+            output: slugifiedText,
+            timestamp: new Date().toISOString()
+        }
+
+        const updatedHistoryData = [newEntry, ...historyData]
+
+        LocalStorageService.setItem(HISTORY_DATA_KEY, updatedHistoryData)
+        setHistoryData(updatedHistoryData)
     }
 
     return (
