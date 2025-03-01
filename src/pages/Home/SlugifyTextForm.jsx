@@ -8,6 +8,8 @@ import { isWhitespaceString, isEmptyString } from '@utils/helpers/string.helpers
 import { STOP_WORDS } from '@utils/constants/stopWords.constants'
 import LocalStorageService from '@services/LocalStorage/LocalStorage.service'
 import { HISTORY_DATA_KEY } from '@utils/constants/localStorageKeys.constants'
+import History from '@components/blocks/History'
+import { getLocalISOTime } from '@utils/helpers/date.helpers'
 
 const SlugifyTextForm = () => {
     const [textFieldInputValue, setTextFieldInputValue] = useState("")
@@ -103,13 +105,18 @@ const SlugifyTextForm = () => {
             id: Date.now(), // unique ID based on timestamp
             input: textFieldInputValue,
             output: slugifiedText,
-            timestamp: new Date().toISOString()
+            timestamp: getLocalISOTime()
         }
 
         const updatedHistoryData = [newEntry, ...historyData]
 
         LocalStorageService.setItem(HISTORY_DATA_KEY, updatedHistoryData)
         setHistoryData(updatedHistoryData)
+    }
+
+    const handleDeleteHistoryButtonClick = () => {
+        LocalStorageService.removeItem(HISTORY_DATA_KEY)
+        setHistoryData([])
     }
 
     return (
@@ -176,7 +183,6 @@ const SlugifyTextForm = () => {
                     >
                         Clear
                     </Button>
-                    {/* TODO: Add show history button here */}
                 </div>
             </Card>
             <Card heading="Output:">
@@ -203,6 +209,8 @@ const SlugifyTextForm = () => {
                 <strong>Example sentence to try:</strong> <br />
                 Hello __Aliens. I STILL believe@ in coMBining #tech and art &#32;&#32;&#32;&#32;&#32;     in 2077. I need - $57B please!
             </p>
+
+            <History historyData={historyData}  onDeleteClick={handleDeleteHistoryButtonClick} />
         </>
     )
 }
