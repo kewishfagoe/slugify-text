@@ -5,6 +5,8 @@
 A small, simple app to generate search engine friendly and user friendly URL slugs.
 This side project gave me a chance to play around with ReactJS.
 
+[![Netlify Status](https://api.netlify.com/api/v1/badges/8a6d9c39-52f7-4998-b906-b7d1bca185cc/deploy-status)](https://app.netlify.com/sites/slugify-text/deploys)
+
 ![](screenshot.png)
 
 
