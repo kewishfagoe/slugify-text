@@ -1,6 +1,6 @@
 <p align="center"><img src="public/file-font-fill.svg" width="80" height="80" alt="Logo"></p>
 
-# Slugiy Text
+# Slugify Text
 
 A small, simple app to generate search engine friendly and user friendly URL slugs.
 This side project gave me a chance to play around with ReactJS.
